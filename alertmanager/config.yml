@@ -1,0 +1,32 @@
+global:
+  # ResolveTimeout is the default value used by alertmanager if the alert does
+  # not include EndsAt, after this time passes it can declare the alert as resolved if it has not been updated.
+  # This has no impact on alerts from Prometheus, as they always include EndsAt.
+  resolve_timeout: 30s
+  # The API URL to use for Slack notifications.
+  slack_api_url: https://hooks.slack.com/services/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
+
+# The root node of the routing tree.
+route:
+  receiver: "slack-notifications"
+  # How long to initially wait to send a notification for a group
+  # of alerts. Allows to wait for an inhibiting alert to arrive or collect
+  # more initial alerts for the same group. (Usually ~0s to few minutes.)
+  group_wait: 30s
+  # How long to wait before sending a notification about new alerts that
+  # are added to a group of alerts for which an initial notification has
+  # already been sent. (Usually ~5m or more.)
+  group_interval: 5m
+  # How long to wait before sending a notification again if it has already
+  # been sent successfully for an alert. (Usually ~3h or more).
+  repeat_interval: 4h
+
+# A list of notification receivers.
+receivers:
+  - name: "slack-notifications"
+    slack_configs:
+    - channel: "#prometheus"
+      send_resolved: true
+      # The Slack webhook URL. Either api_url or api_url_file should be set.
+      # Defaults to global settings if none are set here.
+      # The channel or user to send notifications to.

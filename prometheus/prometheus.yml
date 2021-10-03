@@ -1,0 +1,33 @@
+global:
+  # How frequently to scrape targets
+  scrape_interval: 10s  
+  # How frequently to evaluate rules
+  evaluation_interval: 10s
+
+# Rules and alerts are read from the specified file(s)
+rule_files:
+  - "alert_rules.yml"
+
+# A list of scrape configurations that specifies a set of
+# targets and parameters describing how to scrape them.
+scrape_configs:
+  - job_name: monitoring-nginx
+    metrics_path: /metrics
+    static_configs:
+      - targets: 
+        - nginx_exporter:9527
+
+alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+        - targets:
+          - "alert_manager:9093"
+
+# Alerting specifies settings related to the Alertmanager
+# Configures the protocol scheme used for requests.
+# List of labeled statically configured Alertmanagers.
+# The targets specified by the static config.
+# Alertmanager's default port is 9093
+
+
